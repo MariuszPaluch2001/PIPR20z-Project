@@ -1,0 +1,42 @@
+Warcaby angielskie (warcaby amerykańskie, czekersy)[1] – wariant warcabów.
+Plansza jest 8x8, 12 pionów dla każdego z graczy. 
+Pozycja początkowa jest taka sama jak w warcabach międzynarodowych 8x8. 
+Piony przesuwają się do przodu po skosie o jedno pole, jeżeli nie jest ono zajęte. 
+Jeżeli to pole możliwego ruchu jest zajęte przez pion przeciwnika, a bezpośrednio za tym pionem, na tej samej przekątnej, jest puste pole, można wtedy zbić ten pion przeciwnika, przez postawienie swojego piona na tym pustym polu. 
+Jeżeli gracz ma możliwość w swoim ruchu dokonania bicia, gracz musi to zrobić.
+Jeżeli po biciu gracz ma możliwość kolejnego bicia, gracz musi je wykonać w tym samym posunięciu. 
+Jest to tak zwane bicie wielokrotne.
+Gdy jest więcej niż jedna możliwa droga bicia, możemy ją dowolnie wybrać.
+Pion dochodzący do ostatniego rzędu staje się królem. Promocja piona do króla powoduje zakończenie posunięcia.
+Król ma analogiczną możliwość wykonywania posunięć jak pion, z tym, że może poruszać się i bić także do tyłu. 
+Wygrana następuje po zbiciu wszystkich bierek przeciwnika lub uniemożliwieniu wykonania przez nie ruchu. 
+
+
+
+Szansa uzyskania remisu, nawet z dużo silniejszym przeciwnikiem, jest o wiele większa w warcabach angielskich niż w warcabach międzynarodowych, nie wymagają też tak intensywnego myślenia. 
+Warcaby angielskie są też zwane przez niektórych warcabami amerykańskimi lub warcabami tradycyjnymi.
+Warcaby angielskie zostały rozpracowane przez program Chinook, jeśli obaj gracze wybierają najlepsze posunięcia, to partia warcabów angielskich musi skończyć się remisem[2].
+
+
+[(0, 7), (3, 4), (2, 7), (3, 6), (4, 7), (5, 6), (6, 7), (7, 6)]
+[(2, 3), (1, 0), (2, 1), (3, 0), (4, 1), (5, 0), (6, 1), (7, 0)]
+[(0, 7), (3, 4), (2, 7), (3, 6), (4, 7), (5, 6), (6, 7), (7, 6)]
+[(2, 3), (1, 0), (2, 1), (3, 0), (4, 1), (5, 0), (6, 1), (7, 0)]
+    0   1   2   3   4   5   6   7
+  ╭───┬───┬───┬───┬───┬───┬───┬───╮
+A │   │ ◆ │   │ ◆ │   │ ◆ │   │ ◆ │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+B │   │   │ ◆ │   │ ◆ │   │ ◆ │   │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+C │   │   │   │   │   │   │   │   │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+D │   │   │ ◆ │   │   │   │   │   │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+E │   │   │   │ ◇ │   │   │   │   │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+F │   │   │   │   │   │   │   │   │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+G │   │   │   │ ◇ │   │ ◇ │   │ ◇ │
+  ├───┼───┼───┼───┼───┼───┼───┼───┤
+H │ ◇ │   │ ◇ │   │ ◇ │   │ ◇ │   │
+  ╰───┴───┴───┴───┴───┴───┴───┴───╯
