@@ -18,17 +18,26 @@ class Plansza(object):
         for i in range(szerokosc):
             self.czarne_pionki.append((i, (i+1)%2))
             self.biale_pionki.append((i, wysokosc - (i%2) - 1))
-        
+
         self.pionki = [self.biale_pionki, self.czarne_pionki]
 
         # aktualna plansza ze znakami do odrysowania
         self.stanPlanszy = [[' '] * self.szerokosc for x in range(self.wysokosc)]
 
+    def czy_koniec(self):
+        if len(self.biale_pionki ) == 0:
+            return "Zwyciężyły czarne"
+        elif len(self.czarne_pionki ) == 0:
+            return "Zwyciężyły białe"
+        else:
+            return 0
+
+
 
         #self.gameWon = self.NOTDONE
         #self.turn = firstPlayer
         #self.maxDepth = 10
-    
+
     # # Generate an iterator for all of the moves
     # def iterWhiteMoves(self):
     #     """
@@ -37,7 +46,7 @@ class Plansza(object):
     #     for piece in self.whitelist:
     #         for move in self.iterWhitePiece(piece):
     #             yield move
-                
+
     # def iterBlackMoves(self):
     #     """
     #         Main Generator for black moves
@@ -45,13 +54,13 @@ class Plansza(object):
     #     for piece in self.blacklist:
     #         for move in self.iterBlackPiece(piece):
     #             yield move
-                
+
     # def iterWhitePiece(self, piece):
     #     """
     #         Generates possible moves for a white piece
-    #     """            
+    #     """
     #     return self.iterBoth(piece, ((-1,-1),(1,-1)))
-    
+
     # def iterBlackPiece(self, piece):
     #     """
     #         Generates possible moves for a black piece
@@ -82,7 +91,7 @@ class Plansza(object):
     #                 continue
     #             elif self.turn == self.WHITE and white:
     #                 continue
-    #             # Jump proceeds by adding the same movement in order to jump over the opposing 
+    #             # Jump proceeds by adding the same movement in order to jump over the opposing
     #             # piece on the checkerboard
     #             jumpx = target[0] + move[0]
     #             jumpy = target[1] + move[1]
@@ -94,8 +103,8 @@ class Plansza(object):
     #             black = jump in self.blacklist
     #             white = jump in self.whitelist
     #             if not black and not white:
-    #                 yield (piece, jump, self.turn)                   
-    
+    #                 yield (piece, jump, self.turn)
+
     def zaktualizujStanPlanszy(self):
         """
             Aktualizuj stanPlanszy uwzgledniajac pozycje bialych i czarnych pinkow
@@ -132,7 +141,7 @@ class Plansza(object):
 
         pozycja_zajeta_przez_czarny_pionek = ruch_do in self.czarne_pionki
         pozycja_zajeta_przez_bialy_pionek = ruch_do in self.biale_pionki
-        
+
         if not (pozycja_zajeta_przez_czarny_pionek or pozycja_zajeta_przez_bialy_pionek):
 
             self.wykonaj_pojedynczy_ruch(ruch_z, ruch_do, gracz)
@@ -144,7 +153,7 @@ class Plansza(object):
             raise Exception("Pozycja zajeta")
 
     # # Movement of pieces
-    # def moveSilentBlack(self, moveFrom, moveTo, winLoss): 
+    # def moveSilentBlack(self, moveFrom, moveTo, winLoss):
     #     """
     #         Move black piece without printing
     #     """
@@ -159,7 +168,7 @@ class Plansza(object):
     #         self.gameWon = winLoss
     #     else:
     #         raise Exception
-        
+
     # def moveSilentWhite(self, moveFrom, moveTo, winLoss):
     #     """
     #         Move white piece without printing
@@ -175,7 +184,7 @@ class Plansza(object):
     #         self.gameWon = winLoss
     #     else:
     #         raise Exception
-    
+
     # def moveBlack(self, moveFrom, moveTo, winLoss):
     #     """
     #         Move a black piece from one spot to another. \n winLoss is passed as either 0(white)
@@ -183,7 +192,7 @@ class Plansza(object):
     #     """
     #     self.moveSilentBlack(moveFrom, MoveTo, winLoss)
     #     self.printBoard()
-        
+
     # def moveWhite(self, moveFrom, moveTo, winLoss):
     #     """
     #         Move a white piece from one spot to another. \n winLoss is passed as either 0(white)
@@ -207,12 +216,12 @@ class Plansza(object):
         lines.append('    ' + '   '.join(map(str, list(range(self.szerokosc)))))
         # Prints the top of the gameboard in unicode
         lines.append('  ╭' + ('───┬' * (self.szerokosc-1)) + '───╮')
-        
+
         # Print the boards rows
         for num, row in enumerate(self.stanPlanszy[:-1]):
             lines.append(chr(num+65) + ' │ ' + ' │ '.join(row) + ' │')
             lines.append('  ├' + ('───┼' * (self.szerokosc-1)) + '───┤')
-        
+
         #Print the last row
         lines.append(chr(self.wysokosc+64) + ' │ ' + ' │ '.join(self.stanPlanszy[-1]) + ' │')
 
@@ -224,7 +233,7 @@ class Plansza(object):
 ##############
 #    def getWin(self):
 #        return self.g
-#    
+#
 #    def setWin(self, val):
 ##        if val == 0:
 ##            raise Exception("Game won by white")
