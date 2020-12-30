@@ -7,29 +7,25 @@ firstPlayer = 0
 
 print("Witamy w warcabach ... ")
 p = Plansza(width, height, firstPlayer)
-p.rysujPlansze()
-
 g1 = Gracz(Plansza.WHITE)
 g2 = Gracz(Plansza.BLACK)
+p.zainicjalizuj_plansze(g1, g2)
+p.rysujPlansze()
+
+
 runda = 1
 
-while True:
-
+while (p.sprawdz_czy_zwyciezca is not None):
 
     if runda % 2 != 0:
-        ruch = g1.wczytaj_nastepny_ruch(p)
-        p.wykonaj_ruch(ruch[0],ruch[1],g1)
+        ruch = g1.wczytaj_nastepny_ruch(p,g1)
+        p.sprobuj_wykonac_ruch(ruch[0],ruch[1],g1)
     else:
-        ruch = g2.wczytaj_nastepny_ruch(p)
-        p.wykonaj_ruch(ruch[0],ruch[1],g2)
-
+        ruch = g2.wczytaj_nastepny_ruch(p,g2)
+        p.sprobuj_wykonac_ruch(ruch[0],ruch[1],g2)
+   
     p.rysujPlansze()
-    if p.czy_koniec() != 0:
-        print(p.czy_koniec())
-        break
-
-
-
+        
     runda += 1
     # # Then it is the computers turn
     # temp = minMax2(b)
