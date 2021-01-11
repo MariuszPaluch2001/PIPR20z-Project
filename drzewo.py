@@ -1,65 +1,63 @@
-class Drzewo(object):
+import logging
+
+root_logger= logging.getLogger()
+root_logger.setLevel(logging.DEBUG) # or whatever
+handler = logging.FileHandler('warcaby-utf8.log', 'w', 'utf-8') # or whatever
+handler.setFormatter(logging.Formatter('%(name)s %(message)s')) # or whatever
+root_logger.addHandler(handler)
+
+class WezelDrzewa(object):
     "Generic tree node."
-    def __init__(self, pozycja, children=None, bicie=False):
-        self.pozycja = pozycja
-        self.children = []
-        if children is not None:
-            for child in children:
-                self.add_child(child)
-    
-  
+    def __init__(self, wartosc):
+        self.wartosc = wartosc
+        self.wezly_potomne = []
+        # if children is not None:
+        #     for child in children:
+        #         self.add_child(child)
+
     def puste(self):
-        return len(self.children) == 0
-    
-    def add_child(self, node):
-        self.children.append(node)
+        return len(self.wezly_potomne) == 0 or self.wezly_potomne is None
 
-    def traverse(self, node):
-        if node is not None:
-            for child_node in node.children:
-                self.traverse(child_node) 
-        return
+    def dodaj_nowy_wezel(self, node):
+        root_logger.debug("-->      Do wezla " + str(self.wartosc) + " dodaje wezel " + str(node.wartosc))
+        self.wezly_potomne.append(node)
 
-    # function to print all path from root 
-    # to leaf in binary tree 
-    def printPaths(self, root): 
-        # list to store path 
-        path = [] 
-        self.printPathsRec(root, path, 0) 
+    # def traverse(self, node):
+    #     if node is not None:
+    #         for child_node in node.children:
+    #             self.traverse(child_node)
+    #     return
 
-    # Helper function to print path from root  
-    # to leaf in binary tree 
-    def printPathsRec(self, root, path, pathLen): 
-        
-        # Base condition - if binary tree is 
-        # empty return 
-        if root is None: 
+
+    def generujSciezki(self, wezel_startowy):
+        # list to store path
+        wszystkie_sciezki = []
+        sciezka = []
+        self.generujRekursywnieSciezki(wezel_startowy, sciezka, wszystkie_sciezki, 0)
+        return wszystkie_sciezki
+
+    def generujRekursywnieSciezki(self, wezel, sciezka, sciezki, pathLen):
+
+        if wezel is None:
             return
-    
-        # add current root's data into  
-        # path_ar list 
-        
-        # if length of list is gre 
-        if(len(path) > pathLen):  
-            path[pathLen] = root.pozycja
-        else: 
-            path.append(root.pozycja) 
-    
-        # increment pathLen by 1 
+
+        # if length of list is gre
+        if(len(sciezka) > pathLen):
+            sciezka[pathLen] = wezel.wartosc
+        else:
+            sciezka.append(wezel.wartosc)
+
+        # increment pathLen by 1
         pathLen = pathLen + 1
-    
-        if len(root.children) == 0:
-            
-            # leaf node then print the list 
-            self.printArray(path, pathLen) 
-        else: 
-            # try for left and right subtree 
-            for child_node in root.children:
-                self.printPathsRec(child_node, path, pathLen)
-    
-    # Helper function to print list in which  
-    # root-to-leaf path is stored 
-    def printArray(self, ints, len): 
-        for p in ints[0 : len]: 
-            print(p," ",end="") 
-        print() 
+
+        if len(wezel.wezly_potomne) == 0:
+            #logging.debug("jestem w lisciu " + str(wezel.pozycja) +  "dodaje sciezke " + str(sciezka))
+            # leaf node then print the list
+            #self.printArray(sciezki, pathLen)
+            sciezki.append(sciezka.copy())
+        else:
+            #logging.debug("nie jestem w lisciu " + str(wezel.pozycja)  +  "dodaje sciezke " + str(sciezka))
+            # try for left and right subtree
+            for wezel_potomny in wezel.wezly_potomne:
+                self.generujRekursywnieSciezki(wezel_potomny,sciezka.copy(), sciezki, pathLen)
+

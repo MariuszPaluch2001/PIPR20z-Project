@@ -1,7 +1,11 @@
+
+import random
 #klasa gracz nie powinna przechowywac informacji o pionkach
 class Gracz(object):
+    BLACK = 1
+    WHITE = 2
 
-    def __init__(self, kolor):
+    def __init__(self, kolor=None):
         """
             Tworzy gracza
         """
@@ -11,39 +15,88 @@ class Gracz(object):
     def set_pionki(self, pionki):
         self.pionki = pionki
 
-    def wczytaj_nastepny_ruch(self, plansza, gracz):
-        #statement1 = "Select one of your tokens eg. " + chr(b.whitelist[0][0]+97) + str(b.whitelist[0][1])
-        print("Teraz kolej na gracza " + ( '◆' if self.kolor != 0 else '◇'))
+    def get_kolor_string(self):
+        if self.kolor == self.WHITE:
+            return "Bialy"
+        elif self.kolor == self.BLACK:
+            return "Czarny"
+        else:
+            return "Brak"
 
-        while True: # Dopoki poprawna wartosc pola
-            ruch = []
+    def ustaw_bialy_kolor(self):
+        self.kolor = self.WHITE
 
-            print("Lista mozliwych ruchow: ")
-            plansza.wypisz_mozliwe_ruchy(gracz)
+    def ustaw_czarny_kolor(self):
+        self.kolor = self.BLACK
 
-            print("Wybierz pozycje pionka ")
-            ruch.append(tuple(input().lower()))
+    def jest_koloru_bialego(self):
+        return self.kolor == self.WHITE
 
-            ruch_z = (int(ruch[0][1]), ord(ruch[0][0]) - 97)
+    def jest_koloru_czarnego(self):
+        return self.kolor == self.BLACK
+
+    """
+        Zwraca jeden ruch do wykonania przez danego gracza (self)
+        Ruch to tablica tupli reprezentujacych ruchy.
+        Pojedynczy ruch moze zawierac wiecej niz jedna tuple (bicie)
+    """
+    def zwroc_ruch(self, plansza):
+        return None
+
+    """
+        Dla danego gracza zwraca tablice dopuszczalnych ruchow wszystkich
+        Jezeli gracz ma bicie lista zawiera tylko bicia.
+    """
+    # def mozliwe_ruchy(self, plansza):
+    #     return plansza.mozliwe_ruchy()
+
+    def wypisz_mozliwe_ruchy(self, plansza):
+        mozliwe_ruchy = plansza.mozliwe_ruchy()
+        i=0
+        for sciezka in mozliwe_ruchy:
+            str_sciezka = []
+            # print("Ruch")
+            for ruch in sciezka:
+                    str_sciezka.append(str(chr(ruch[1]+65)) +  str(ruch[0]))
+
+            print( '[' + str(i)  + ']\t\t' + '  ->  '.join(str_sciezka))
+            i += 1
 
 
+class LudzkiGracz(Gracz):
 
-            # for i in plansza.iterator_mozliwych_posuniec(ruch_z,[(-1,-1),(1,-1)],self, None):
-            #     print(i)
+    def name(self):
+        return "Ludzki gracz"
+
+    def zwroc_ruch(self, plansza):
+        # obowiazkowe_bicia = []
+        mozliwe_ruchy = []
+
+        print("Dostepne ruchy")
+        i = 0
+
+        mozliwe_ruchy = plansza.mozliwe_ruchy()
+        for sciezka in mozliwe_ruchy:
+            str_sciezka = []
+            # print("Ruch")
+            for ruch in sciezka:
+                    str_sciezka.append(str(chr(ruch[1]+65)) +  str(ruch[0]))
+
+            print( '[' + str(i)  + ']\t\t' + '  ->  '.join(str_sciezka))
+            i += 1
+
+        indeks_ruchu = int(input("Wprowadz number ruchu ktory chcesz wykonac np. 1: "))
+        return mozliwe_ruchy[indeks_ruchu]
+
+# Trzeba zaimplementowac algorytm minikasowy
+class GlupiutkiKomputer(Gracz):
+
+    def name(self):
+        return "Glupioutki komp"
 
 
-            ruch.append(tuple(input().lower()))
-            if len(ruch[0]) != 2  or len(ruch[1]) != 2 :
-                print("Ups, niepoprawny ruch")
-                continue
-
-
-            ruch_do = (int(ruch[1][1]), ord(ruch[1][0]) - 97)
-
-            # Is the piece we want to move one we own?
-            if not (ruch_z in plansza.pionki[self.kolor]):
-                print("Ups, to nie twoj pionek, wybierz go z listy (wiersz, kolumna) " + str(plansza.pionki[self.kolor]))
-                continue
-            break
-        move = (ruch_z, ruch_do)
-        return move
+    def zwroc_ruch(self, plansza):
+        # glupiutki, bo zawsze wybierze pierwszy ruch
+        indeks_ruchu = random.randint(0, len(plansza.mozliwe_ruchy())-1)
+        return plansza.mozliwe_ruchy()[indeks_ruchu]
+        #return plansza.mozliwe_ruchy(self)[len(plansza.mozliwe_ruchy(self))-1]
