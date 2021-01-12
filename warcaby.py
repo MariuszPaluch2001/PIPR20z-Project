@@ -33,11 +33,11 @@ class Warcaby():
                 self.wynik = self.plansza.get_przeciwnik().kolor
                 break
 
-            #print("****Teraz gracz " + p.get_gracz_wykonujacy_ruch().get_kolor_string())
+            print("Kolej na gracza " + self.plansza.get_gracz_wykonujacy_ruch().get_kolor_string())
             ruch = self.plansza.get_gracz_wykonujacy_ruch().zwroc_ruch(plansza_kopia)
             self.plansza.wykonaj_wskazane_ruchy(ruch)
 
-            if len(ruch) <= 2: # co najmniej dwa przesuniecia oznaczaja bicie
+            if  len(ruch) <= 2 and abs(ruch[1][0] - ruch[0][0]) != 2: # w sciezce ruchu nie ma wieloktornego bicia albo pojedynczego
                 self.ilosc_kolejnych_rund_bez_bic += 1
                 if self.ilosc_kolejnych_rund_bez_bic >= 2*15:
                     self.wynik = 0
