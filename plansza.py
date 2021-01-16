@@ -1,8 +1,17 @@
+#from copy import deepcopy
+#from gracz import Gracz
+#from drzewo import WezelDrzewa 
+#from pionek import Pionek
+
+
 from drzewo import WezelDrzewa
 from gracz import Gracz
 from pionek import Pionek
 import logging
 import copy
+
+
+import logging
 #root_logger.basicConfig(filename='warcaby.log', level=root_logger.DEBUG)
 
 root_logger= logging.getLogger()
@@ -12,9 +21,9 @@ handler.setFormatter(logging.Formatter('%(name)s %(message)s')) # or whatever
 root_logger.addHandler(handler)
 
 class Plansza(object):
-    # BLACK = 1
-    # WHITE = 0
-    # NOTDONE = -1
+    WYNIK_WYGRAL_CZARNY = 1
+    WYNIK_WYGRAL_BIALY = 2
+    WYNIK_REMIS = 0
 
     def __init__(self, wysokosc=8, szerokosc=8, bialy_gracz = Gracz() , czarny_gracz = Gracz(), kolejka = 1):
         """
@@ -37,11 +46,14 @@ class Plansza(object):
         self.set_bialy_gracz(bialy_gracz)
         self.set_czarny_gracz(czarny_gracz)
         self.kolejka = kolejka
+        self.wynik = None
 
     def get_gracz_wykonujacy_ruch(self):
         if self.kolejka % 2 != 0 :
+            #print("Kolejka .... " + str(self.kolejka) + " " + self.czarny_gracz.get_kolor_string())
             return self.czarny_gracz
         else:
+            #print("Kolejka .... " + str(self.kolejka) + " " + self.bialy_gracz.get_kolor_string())
             return self.bialy_gracz
 
     def get_przeciwnik(self):
@@ -63,14 +75,27 @@ class Plansza(object):
     def get_biale_pionki(self):
         return self.biale_pionki
 
-    def sprawdz_czy_zwyciezca(self):
+    def zwyciezca(self):
+        gracz = self.get_gracz_wykonujacy_ruch()
+        if len(gracz.pionki) == 0 or self.mozliwe_ruchy() == 0:
+           self.wynik = (Plansza.WYNIK_WYGRAL_CZARNY if gracz.jest_koloru_bialego() else Plansza.WYNIK_WYGRAL_BIALY)
+           return self.get_przeciwnik() 
 
-        if  len(self.biale_pionki == 0):
-            return 1
-        elif len(self.czarne_pionki == 0):
-            return 0
-        else:
-            return None
+        #if len(self.biale_pionki) == 0:
+        #    return Plansza.WYNIK_WYGRAL_CZARNY
+        #elif len(self.czarne_pionki) == 0:
+        #    return Plansza.WYNIK_WYGRAL_BIALY
+
+        #plansza_kopia = copy.deepcopy(self)
+        #gracz_wykonujacy_ruch = plansza_kopia.get_gracz_wykonujacy_ruch()
+        #if len(plansza_kopia.mozliwe_ruchy()) == 0: 
+        #    plansza_kopia.kolejka += 1
+        #    if len(plansza_kopia.mozliwe_ruchy()) != 0:
+        #        self.wynik = (Plansza.WYNIK_WYGRAL_CZARNY if gracz_wykonujacy_ruch.jest_koloru_bialego() else Plansza.WYNIK_WYGRAL_BIALY)
+        #    else:
+        #        self.wynik = Plansza.WYNIK_REMIS
+       # 
+        #return self.wynik
 
     #do inicjalizacji
     def wstaw_pionek_na_plansze(self, pionek):
@@ -89,13 +114,24 @@ class Plansza(object):
         elif pionek.gracz.jest_koloru_czarnego():
             self.czarne_pionki.remove(pionek)
 
+    """
+       Przesun pionek na pozycje docelowa. Zwroc True jesli ruch jest promocja i konczy dalszy ruch
+    """
     def przesun_pionek_na_dana_pozycje(self, pionek, pozycja_docelowa):
         #print("Przesuwam pionek na planszy " + str(pionek.pozycja) + " do " + str(pozycja_docelowa))
         del self.slownikPozycji[pionek.get_pozycja()]
         self.slownikPozycji[pozycja_docelowa] = pionek
         pionek.set_pozycja(pozycja_docelowa)
         if (pozycja_docelowa[1] == self.wysokosc-1 and pionek.gracz.jest_koloru_bialego()) or  (pozycja_docelowa[1] == 0 and pionek.gracz.jest_koloru_czarnego()):
-            pionek.jest_damka = True
+
+            # Watpliwosc, promocja damki do pionka konczy ruch. A co jesli jest juz damka ?
+            # Zakladam ze ograniczenia promocji nie obowiazuja gdy pionek jest juz damka
+            if pionek.jest_damka == False:
+                pionek.jest_damka = True
+                return True
+
+
+
 
 
     def zainicjalizuj_plansze(self):
@@ -141,13 +177,15 @@ class Plansza(object):
         if (abs(ruch_z[0] - ruch_do[0]) == 2 and abs(ruch_z[1] - ruch_do[1]) == 2):
             poz_pomiedzy = (min(ruch_z[0], ruch_do[0]) + 1, min(ruch_z[1], ruch_do[1]) + 1)
             pionek_na_pozycji_pomiedzy = self.slownikPozycji.get(poz_pomiedzy)
-            if pionek_na_pozycji_pomiedzy.gracz.get_kolor_string() == pionek.gracz.get_kolor_string(): # jesli ten sam bracz
+            if pionek_na_pozycji_pomiedzy.gracz.get_kolor_string() == pionek.gracz.get_kolor_string(): # jesli ten sam gracz
                 raise ValueError("Tu, na pozycji " + str(poz_pomiedzy) + " stoi pionek gracza o kolorze " + pionek_na_pozycji_pomiedzy.gracz.get_kolor_string())
             else:
                 self.usun_pionek_z_planszy(pionek_na_pozycji_pomiedzy)
-                self.przesun_pionek_na_dana_pozycje(pionek,ruch_do)
-        else:
-            self.przesun_pionek_na_dana_pozycje(pionek,ruch_do)
+        #        return self.przesun_pionek_na_dana_pozycje(pionek,ruch_do)
+        #else:
+
+        return self.przesun_pionek_na_dana_pozycje(pionek,ruch_do)
+
 
     def wykonaj_wskazane_ruchy(self, sciezka_ruchu):
         for i in range(len(sciezka_ruchu)-1):
@@ -215,13 +253,14 @@ class Plansza(object):
                 self_copy = copy.deepcopy(self)
                 #teraz wykonujemy ruch ( modifukujemy stan planszy !)
                 #musimy to zrobic aby uniknac scenariusza zapetlenia damki
-                self_copy.wykonaj_pojedynczy_ruch(pozycja_startowa, pozycja_po_biciu)
+                ruch_zakonczony_promocja = self_copy.wykonaj_pojedynczy_ruch(pozycja_startowa, pozycja_po_biciu)
+                
+                if ruch_zakonczony_promocja != True:
+                    #musimy rekurencyjnie zbudowac drzewo dalszych mozliwych bic
+                    #oczywiscie na kopii zeby 'wyluskac' wszystkie sciezki bic
+                    #self_copy = copy.deepcopy(self)
+                    self_copy.generuj_mozliwe_ruchy(pozycja_po_biciu, True, nowy_wezel_drzewa, [])
 
-
-                #musimy rekurencyjnie zbudowac drzewo dalszych mozliwych bic
-                #oczywiscie na kopii zeby 'wyluskac' wszystkie sciezki bic bic
-                #self_copy = copy.deepcopy(self)
-                self_copy.generuj_mozliwe_ruchy(pozycja_po_biciu, True, nowy_wezel_drzewa, [])
 
             else: # nie ma tam innego pionka na pozycji_do
                 if czy_poprzedni_ruch_byl_biciem is True:
@@ -238,12 +277,16 @@ class Plansza(object):
         return drzewo_obowiazkowych_bic
 
 
-    def mozliwe_ruchy(self):
+    def mozliwe_ruchy(self, gracz = None):
+
+        if gracz is None:
+            gracz = self.get_gracz_wykonujacy_ruch()
+
         # Trzewa stworzyc kopie planszy, bo inaczej nie mozna generowac ruchow
         sciezki_obowiazkowych_bic = []
         mozliwe_ruchy = []
         #print("---Teraz gracz " + self.get_gracz_wykonujacy_ruch().get_kolor_string())
-        for pionek in self.get_gracz_wykonujacy_ruch().pionki:
+        for pionek in gracz.pionki:
             self_copy = copy.deepcopy(self)
             pozycja_startowa = pionek.get_pozycja()
             drzewo_obowiazkowych_bic = None
@@ -265,9 +308,11 @@ class Plansza(object):
         """
             Narysuj plansze w UTF-8
         """
+
         # Updates Game board
         self.zaktualizujStanPlanszy()
         lines = []
+        lines.append('  ')
         # This prints the numbers at the top of the Game Board
         lines.append('      ' + '   '.join(map(str, list(range(self.szerokosc)))))
         # Prints the top of the gameboard in unicode

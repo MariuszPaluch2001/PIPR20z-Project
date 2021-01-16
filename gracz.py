@@ -1,7 +1,13 @@
 
 import random
+#from copy import deepcopy
+import copy
+from ai import AI
+from pomocnicze import *
+
 #klasa gracz nie powinna przechowywac informacji o pionkach
 class Gracz(object):
+
     BLACK = 1
     WHITE = 2
 
@@ -34,6 +40,12 @@ class Gracz(object):
 
     def jest_koloru_czarnego(self):
         return self.kolor == self.BLACK
+
+    def get_mnoznik_punktow(self):
+        if self.jest_koloru_czarnego():
+            return 1
+        else:
+            return -1
 
     """
         Zwraca jeden ruch do wykonania przez danego gracza (self)
@@ -100,3 +112,22 @@ class GlupiutkiKomputer(Gracz):
         indeks_ruchu = random.randint(0, len(plansza.mozliwe_ruchy())-1)
         return plansza.mozliwe_ruchy()[indeks_ruchu]
         #return plansza.mozliwe_ruchy(self)[len(plansza.mozliwe_ruchy(self))-1]
+
+class MadryKomputer(Gracz):
+    def name(self):
+        return "Madry komputer (negamax)"
+
+    def zwroc_ruch(self, plansza):
+        # glupiutki, bo zawsze wybierze pierwszy ruch
+
+        ai = AI(plansza, 4)
+        #kopia = copy.deepcopy(plansza)
+        kopia = plansza
+        (najlepsza_plansza, najlepsza_ocena, najlepsza_sciezka) = ai.negamax(ai.startowa_plansza, ai.maksymalna_glebokosc)
+
+        print(najlepsza_sciezka) 
+        #print("Gracz " + self.name + " wykonuje ruch: ")
+        #for ruch in najlepsza_sciezka:
+        print("Najsciezka " + sciezka_to_str(najlepsza_sciezka))
+        return najlepsza_sciezka
+

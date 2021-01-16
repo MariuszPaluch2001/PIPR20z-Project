@@ -1,9 +1,20 @@
 
+
+#from copy import deepcopy
+#from plansza import Plansza
+#from gracz import *
+#from negamax import NegamaxAlgorytm
+
 from gracz import Gracz
 from plansza import Plansza
 from gracz import GlupiutkiKomputer
+from gracz import MadryKomputer
 from gracz import LudzkiGracz
+from ai import AI
+from pomocnicze import *
 import copy
+
+
 
 class Warcaby():
 
@@ -24,40 +35,41 @@ class Warcaby():
         Zwraca numer gracza bedacego zwyciezca (1 lub 2) lub 0 gdy remis
     """
     def graj(self):
-
-        while (self.plansza.sprawdz_czy_zwyciezca is not None):
-            self.plansza.rysujPlansze()
+        self.plansza.rysujPlansze()
+        while (self.plansza.zwyciezca() is None):
+            #self.plansza.rysujPlansze()
             plansza_kopia = copy.deepcopy(self.plansza)
 
-            if len(plansza_kopia.mozliwe_ruchy()) == 0:
-                self.wynik = self.plansza.get_przeciwnik().kolor
-                break
-
-            print("Kolej na gracza " + self.plansza.get_gracz_wykonujacy_ruch().get_kolor_string())
             ruch = self.plansza.get_gracz_wykonujacy_ruch().zwroc_ruch(plansza_kopia)
+            print(sciezka_to_str(ruch))
             self.plansza.wykonaj_wskazane_ruchy(ruch)
 
-            if  len(ruch) <= 2 and abs(ruch[1][0] - ruch[0][0]) != 2: # w sciezce ruchu nie ma wieloktornego bicia albo pojedynczego
-                self.ilosc_kolejnych_rund_bez_bic += 1
-                if self.ilosc_kolejnych_rund_bez_bic >= 2*15:
-                    self.wynik = 0
-                    break
-            else:
-                self.ilosc_kolejnych_rund_bez_bic = 0
+            #if  len(ruch) <= 2 and abs(ruch[1][0] - ruch[0][0]) != 2: # w sciezce ruchu nie ma wieloktornego bicia albo pojedynczego
+            #    self.ilosc_kolejnych_rund_bez_bic += 1
+            #    if self.ilosc_kolejnych_rund_bez_bic >= 2*15:
+            #        self.wynik = 0
+            #        break
+            #else:
+            #    self.ilosc_kolejnych_rund_bez_bic = 0
 
-            #p.rysujPlansze()
+            self.plansza.rysujPlansze()
             self.plansza.kolejka += 1
 
-        if (self.wynik == 0):
-            print("Gra zakonczyla sie REMISEM")
-        else:
-              if (self.wynik == Gracz.WHITE):
-                  print("Zwyciezyl gracz bialy" )
-              elif (self.wynik == Gracz.BLACK):
-                print("Zwyciezyl gracz czarny" )
+            #print(self.plansza.get_gracz_wykonujacy_ruch().get_kolor_string() + " " + str(self.plansza.kolejka) + " " + str(NegamaxAlgorytm().funkcja_oceniajaca(self.plansza)))
+
+        self.plansza.rysujPlansze()
+        if (self.plansza.wynik == Plansza.WYNIK_WYGRAL_BIALY):
+            print("Zwyciezyl gracz bialy" )
+        elif (self.plansza.wynik == Plansza.WYNIK_WYGRAL_CZARNY):
+            print("Zwyciezyl gracz czarny")
+        elif (self.plansza.wynik == Plansza.WYNIK_REMIS):
+            print("Gra zakonczyla sie remisem")
+
+       
 
         print("Ilosc kolejek " + str(self.plansza.kolejka))
-        return self.wynik
+        return self.plansza.wynik
+
 
 
 print("*"*15 +  "Witamy w warcabach ... " + "*"*15 )
@@ -65,7 +77,8 @@ rodzaj_gracza1 = int(input("Wprowadz typ gracza1 (czarny) " + "\n".join([ "\n[1]
 rodzaj_gracza2 = int(input("Wprowadz typ gracza2 (bialy) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"])+ "\n"))
 
 gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else GlupiutkiKomputer()
-gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else GlupiutkiKomputer()
+gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else MadryKomputer()
+#gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else MadryKomputer()
 print (gracz1.name())
 print (gracz2.name())
 w = Warcaby(gracz1, gracz2)

@@ -2,9 +2,6 @@ from gracz import Gracz
 
 class Pionek(object):
 
-    # BLACK = 1
-    # WHITE = 0
-
     def __init__(self, gracz, pozycja, damka = False):
         """
             Tworzy pionka
