@@ -15,8 +15,6 @@ handler.setFormatter(logging.Formatter('%(name)s %(message)s')) # or whatever
 root_logger.addHandler(handler)
 
 class Plansza(object):
-    WYNIK_WYGRAL_CZARNY = 1
-    WYNIK_WYGRAL_BIALY = 2
     WYNIK_REMIS = 0
 
     """
@@ -44,6 +42,7 @@ class Plansza(object):
         self.set_czarny_gracz(czarny_gracz)
         
         self.kolejka = kolejka
+        self.ostatni_ruch_pionkiem = kolejka
         self.wynik = None
 
     def get_gracz_wykonujacy_ruch(self):
@@ -71,11 +70,15 @@ class Plansza(object):
     def get_biale_pionki(self):
         return self.biale_pionki
 
-    def zwyciezca(self):
+    """
+        Funkcja sprawdza czy gra zakonczona zwyciestwem (zwraca zwycieskiego gracza) lub remisem
+    """
+    def koniec_gry(self):
         gracz = self.get_gracz_wykonujacy_ruch()
-        if len(gracz.pionki) == 0 or self.mozliwe_ruchy() == 0:
-           self.wynik = (Plansza.WYNIK_WYGRAL_CZARNY if gracz.jest_koloru_bialego() else Plansza.WYNIK_WYGRAL_BIALY)
+        if len(gracz.pionki) == 0 or len(self.mozliwe_ruchy()) == 0:
            return self.get_przeciwnik() 
+        if self.kolejka - self.ostatni_ruch_pionkiem > 2*20:
+            return Plansza.WYNIK_REMIS
  
     """
         Bezwarunkowo usuwa pionek z planszy
@@ -112,6 +115,8 @@ class Plansza(object):
     """
     def wykonaj_pojedynczy_ruch(self, ruch_z, ruch_do):
         pionek = self.slownikPozycji[ruch_z]
+        if pionek.jest_damka == False:
+            self.ostatni_ruch_pionkiem = self.kolejka
 
         if (abs(ruch_z[0] - ruch_do[0]) == 2 and abs(ruch_z[1] - ruch_do[1]) == 2): #ruch jest biciem
 

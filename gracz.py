@@ -86,10 +86,6 @@ class LudzkiGracz(Gracz):
 
         mozliwe_ruchy = plansza.mozliwe_ruchy()
         for sciezka in mozliwe_ruchy:
-            #str_sciezka = []
-            #for ruch in sciezka:
-            #        str_sciezka.append(str(chr(ruch[1]+65)) +  str(ruch[0]))
-
             print( '[' + str(i)  + ']\t\t' + sciezka_to_str(sciezka))
             i += 1
 
@@ -100,7 +96,7 @@ class LudzkiGracz(Gracz):
 """
   Naiwna implementacja komputerowego gracza zwracajaca pierwszy ruch z drzewa dostepnych ruchow
 """
-class GlupiutkiKomputer(Gracz):
+class LosowyKomputer(Gracz):
 
     def name(self):
         return "Glupiutki komputer (losowe ruchy)"
@@ -113,17 +109,17 @@ class GlupiutkiKomputer(Gracz):
 """
   Implementacja madrego gracza oprata na algorytmie negamax
 """
-class MadryKomputer(Gracz):
+class InteligentyKomputer(Gracz):
 
     def __init__(self, kolor=None):
         super()
         self.ai = AI()
 
     def name(self):
-        return "Madry komputer ( alg. negamax, glebokosc: " + str(self.ai.maksymalna_glebokosc) + " )"
+        return "AI (poziom : " + str(self.ai.maksymalna_glebokosc) + " )"
 
     def ustaw_poziom_trudnosci(self, poziom=6):
-        ai.set_maksymalna_glebokosc(poziom)
+        self.ai.set_maksymalna_glebokosc(poziom)
 
     def zwroc_ruch(self, plansza):
         return self.ai.zwroc_ruch(plansza)

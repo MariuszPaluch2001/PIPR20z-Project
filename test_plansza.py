@@ -30,15 +30,16 @@ def test_zainicjalizowanej_planszy():
     assert len(p.mozliwe_ruchy()) == 7
 
 
-def test_zwyciezca():
-    p = Plansza()
-    p.kolejka = 2
-    assert p.get_gracz_wykonujacy_ruch() == p.bialy_gracz
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(6,6)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,7)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(7,7)))
-    p.rysujPlansze()
-    assert p.zwyciezca() == Plansza.WYNIK_WYGRAL_CZARNY
+def test_koniec_gry():
+    #p = Plansza()
+    #p.kolejka = 2
+    #assert p.get_gracz_wykonujacy_ruch() == p.bialy_gracz
+    #p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(6,6)))
+    #p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,7)))
+    #p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(7,7)))
+    #p.rysujPlansze()
+    #p.koniec_gry()
+    #assert p.wynik == Plansza.WYNIK_WYGRAL_CZARNY
 
     p2 = Plansza()
     p2.kolejka = 3
@@ -47,7 +48,8 @@ def test_zwyciezca():
     p2.wstaw_pionek_na_plansze(Pionek(p2.bialy_gracz,(5,0)))
     p2.wstaw_pionek_na_plansze(Pionek(p2.bialy_gracz,(7,0)))
     p2.rysujPlansze()
-    assert p2.zwyciezca() == Plansza.WYNIK_WYGRAL_BIALY
+    p2.koniec_gry()
+    assert p2.koniec_gry() == Plansza.WYNIK_WYGRAL_BIALY
 
     #p3 = Plansza()
     #p3.kolejka = 3
@@ -55,7 +57,7 @@ def test_zwyciezca():
     #p3.wstaw_pionek_na_plansze(Pionek(p3.czarny_gracz,(7,6)))
     #p3.wstaw_pionek_na_plansze(Pionek(p3.bialy_gracz,(6,7)))
     #p3.rysujPlansze()
-    #assert p3.zwyciezca() == Plansza.WYNIK_REMIS
+    #assert p3.koniec_gry() == Plansza.WYNIK_REMIS
 
 
 def test_funkcja_oceniajaca():
@@ -221,10 +223,8 @@ def test_negamax():
     p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(7,0)))
 
     p.rysujPlansze()
-    ai = AI(p,7)
-    (po,o,s) = ai.negamax(ai.startowa_plansza, ai.maksymalna_glebokosc)
-    print(sciezka_to_str(s))
-    p.rysujPlansze()
-    po.rysujPlansze()
+
+    ai = AI()
+    sciezka = ai.zwroc_ruch(p)
 
 

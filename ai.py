@@ -1,6 +1,7 @@
 import copy
 from pomocnicze import *
 import logging
+#from plansza import Plansza --> cyclic import error
 
 ai_logger= logging.getLogger()
 ai_logger.setLevel(logging.DEBUG) 
@@ -32,7 +33,17 @@ class AI:
     def funkcja_oceniajaca(self, plansza):
         gracz = plansza.get_gracz_wykonujacy_ruch()
         przeciwnik = plansza.get_przeciwnik()
-        return self.punkty_za_pionki(gracz) - self.punkty_za_pionki(przeciwnik)
+        k = plansza.koniec_gry()
+       
+        if k is not None:
+            if k == gracz:
+                return float('inf')
+            elif k == przeciwnik:
+                return float('-inf')
+            elif k == 0: # Plansza.WYNIK_REMIS: --> cyclic import error
+                return 0
+        else:
+            return self.punkty_za_pionki(gracz) - self.punkty_za_pionki(przeciwnik)
 
     """
         algorytm negamax (wariacja minimax)
@@ -40,7 +51,7 @@ class AI:
     """
     def negamax(self, plansza, glebokosc):
 
-        if glebokosc == 0: #or plansza.zwyciezca() is not None:
+        if glebokosc == 0 or plansza.koniec_gry() is not None:
             return (plansza, self.funkcja_oceniajaca(plansza), None)
 
         max_ocena = float('-inf')
