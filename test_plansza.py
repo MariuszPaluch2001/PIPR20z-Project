@@ -5,6 +5,8 @@ from pionek import Pionek
 from ai import AI
 from pomocnicze import *
 from copy import deepcopy
+import copy
+import unittest
 
 
 
@@ -31,16 +33,17 @@ def test_zainicjalizowanej_planszy():
 
 
 def test_koniec_gry():
-    #p = Plansza()
-    #p.kolejka = 2
-    #assert p.get_gracz_wykonujacy_ruch() == p.bialy_gracz
-    #p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(6,6)))
-    #p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,7)))
-    #p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(7,7)))
-    #p.rysujPlansze()
-    #p.koniec_gry()
-    #assert p.wynik == Plansza.WYNIK_WYGRAL_CZARNY
+    #czarny wygral, bialy nie ma ruchu
+    p = Plansza()
+    p.kolejka = 2
+    assert p.get_gracz_wykonujacy_ruch() == p.bialy_gracz
+    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(6,6)))
+    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,7)))
+    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(7,7)))
+    p.rysujPlansze()
+    assert p.koniec_gry() == p.czarny_gracz
 
+    #bialy wygral, czarny nie ma ruchu
     p2 = Plansza()
     p2.kolejka = 3
     assert p2.get_gracz_wykonujacy_ruch() == p2.czarny_gracz
@@ -48,39 +51,35 @@ def test_koniec_gry():
     p2.wstaw_pionek_na_plansze(Pionek(p2.bialy_gracz,(5,0)))
     p2.wstaw_pionek_na_plansze(Pionek(p2.bialy_gracz,(7,0)))
     p2.rysujPlansze()
-    p2.koniec_gry()
-    assert p2.koniec_gry() == Plansza.WYNIK_WYGRAL_BIALY
+    assert p2.koniec_gry() == p2.bialy_gracz
 
-    #p3 = Plansza()
-    #p3.kolejka = 3
-    #assert p2.get_gracz_wykonujacy_ruch() == p3.czarny_gracz
-    #p3.wstaw_pionek_na_plansze(Pionek(p3.czarny_gracz,(7,6)))
-    #p3.wstaw_pionek_na_plansze(Pionek(p3.bialy_gracz,(6,7)))
-    #p3.rysujPlansze()
-    #assert p3.koniec_gry() == Plansza.WYNIK_REMIS
+    #remis po 40 kolejnych ruchach damkami
+    p3 = Plansza()
+    p3.wstaw_pionek_na_plansze(Pionek(p2.czarny_gracz,(6,4)))
+    p3.wstaw_pionek_na_plansze(Pionek(p2.bialy_gracz,(3,0)))
+    p3.kolejka = 61
+    p3.ostatni_ruch_pionkiem = 20
+    p3.rysujPlansze()
+    assert p3.koniec_gry() == Plansza.WYNIK_REMIS
 
+    #bialy wygral, czarny nie ma pionkow
+    p4 = Plansza()
+    p4.kolejka = 3
+    assert p4.get_gracz_wykonujacy_ruch() == p4.czarny_gracz
+    p4.wstaw_pionek_na_plansze(Pionek(p4.bialy_gracz,(6,1)))
+    p4.rysujPlansze()
+    assert p2.koniec_gry() == p2.bialy_gracz
 
-def test_funkcja_oceniajaca():
-    p = Plansza()
-    p.zainicjalizuj_plansze()
-    p.kolejka = 1
-    assert p.get_gracz_wykonujacy_ruch() == p.czarny_gracz
-    
-    ai = AI(p, 8)
-    p.usun_pionek_z_planszy(p.bialy_gracz.pionki[0])
-    assert ai.funkcja_oceniajaca(p) == 12*10-11*10
-
-    p.kolejka = 2
-
-    ai2 = AI(p, 8)
-    assert p.get_gracz_wykonujacy_ruch() == p.bialy_gracz
-    assert ai2.funkcja_oceniajaca(p) == 11*10-12*10
-
-    p.bialy_gracz.pionki[0].jest_damka = True
-    assert ai2.funkcja_oceniajaca(p) == 10*10-12*10+30
+    #czarny wygral, bialy nie ma pionkow
+    p5 = Plansza()
+    p5.kolejka = 4
+    assert p5.get_gracz_wykonujacy_ruch() == p5.bialy_gracz
+    p5.wstaw_pionek_na_plansze(Pionek(p5.czarny_gracz,(6,1)))
+    p5.rysujPlansze()
+    assert p5.koniec_gry() == p5.czarny_gracz
 
 
-def test_gleboka_kopia():
+def test_gleboka_kopia_planszy():
     p = Plansza()
     p.zainicjalizuj_plansze()
 
@@ -118,26 +117,36 @@ def test_gleboka_kopia():
 """
     Damka wykonuje cykl bic i wraca na pozycje startowa
 """
-def test_zapetlenia_damki_v2():
+def test_zapetlenia_damki():
     p = Plansza()
 
-    startowy_pionek = Pionek(p.bialy_gracz,(4,7))
-    startowy_pionek.zamien_w_damke()
+    damka = Pionek(p.czarny_gracz,(3,7), True)
 
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(3,4)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,4)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(3,6)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,6)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(7,4)))
-    p.wstaw_pionek_na_plansze(startowy_pionek)
-    p.gracz_wykonujacy_ruch = p.bialy_gracz
-    assert len(p.czarny_gracz.pionki) == 5
-    assert len(p.bialy_gracz.pionki) == 1
-    assert len(p.gracz_wykonujacy_ruch.pionki) == 1
+    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(2,4)))
+    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(4,4)))
+    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(2,6)))
+    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(4,6)))
+    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(6,4)))
+    p.wstaw_pionek_na_plansze(damka)
+    assert p.get_gracz_wykonujacy_ruch() == p.czarny_gracz
+    assert len(p.czarny_gracz.pionki) == 1
+    assert len(p.bialy_gracz.pionki) == 5
 
     p.rysujPlansze()
+    sciezki_str = []
+    for sciezka in p.mozliwe_ruchy():
+        sciezki_str.append(sciezka_to_str(sciezka))
+
+    assert "H3 -> F1 -> D3 -> F5 -> D7" in sciezki_str
+    assert "H3 -> F1 -> D3 -> F5 -> H3" in sciezki_str
+    assert "H3 -> F5 -> D3 -> F1 -> H3" in sciezki_str
+    assert "H3 -> F5 -> D7" in sciezki_str
+
     p.wykonaj_wskazane_ruchy(p.mozliwe_ruchy()[0])
     p.rysujPlansze()
+    assert len(p.czarny_gracz.pionki) == 1
+    assert len(p.bialy_gracz.pionki) == 1
+
 
 
 """
@@ -155,33 +164,21 @@ def test_dwoch_alternatywnych_bic():
 
     p.rysujPlansze()
 
+    #bicia sa obowiazkowe, wiec tylko 2 alternatywny bicia dostepne
     sciezki = p.mozliwe_ruchy()
-    print(sciezki)
     assert len(sciezki) == 2
     assert len(sciezki[0]) == 2
     assert len(sciezki[1]) == 2
-    assert (5, 5) == sciezki[0][0]
-    assert (3, 3) == sciezki[0][1]
-    assert (5, 5) == sciezki[1][0]
-    assert (3, 7) == sciezki[1][1]
 
-def test_podwojnego_bicia():
-    p = Plansza()
+    sciezki_str = []
+    for sciezka in p.mozliwe_ruchy():
+        sciezki_str.append(sciezka_to_str(sciezka))
 
-    damka = Pionek(p.czarny_gracz,(5,7), True)
-    p.gracz_wykonujacy_ruch = p.czarny_gracz
+    assert "F5 -> D3" in sciezki_str
+    assert "F5 -> H3" in sciezki_str
 
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(2,2)))
 
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(0,2)))
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(2,4)))
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(4,6)))
-    p.wstaw_pionek_na_plansze(damka)
-
-    p.rysujPlansze()
-
-def test_drzewo():
-    print(type((2,2)))
+def test_sciezek_bic():
     a = WezelDrzewa(((2,2)))
     b = WezelDrzewa((1,3))
     a.dodaj_nowy_wezel(b)
@@ -189,8 +186,12 @@ def test_drzewo():
     b.dodaj_nowy_wezel(d)
     a.dodaj_nowy_wezel(WezelDrzewa((5,5)))
     sciezki = a.generujSciezki(a)
-    print(sciezki)
+    assert [(2, 2), (1, 3), (0, 4)] in sciezki
+    assert [(2, 2), (5, 5)] in sciezki
 
+# pionek osiagajacy koniec plaszy jest promowany do damki
+# konczy to mozliwosc ruchu, nawet jesli jest bicie
+# jezeli pionek jest juz damka to powyzsze nie obowiazuje
 def test_promocji():
     p = Plansza()
     p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(5,2)))
@@ -202,6 +203,7 @@ def test_promocji():
     ruch = p.mozliwe_ruchy()
 
     print(sciezka_to_str(ruch[0]))
+    assert sciezka_to_str(ruch[0]) == "C5 -> A3"
 
     #a teraz ta sama plansza, tylko z czarna damka
     p.czarne_pionki[0].jest_damka = True
@@ -209,22 +211,7 @@ def test_promocji():
     ruch = p.mozliwe_ruchy()
 
     print(sciezka_to_str(ruch[0]))
+    assert sciezka_to_str(ruch[0]) == "C5 -> A3 -> C1"
 
-
-def test_negamax():
-    p = Plansza()
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(4,7)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(2,7)))
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(3,6))) # +1 +1
-    p.wstaw_pionek_na_plansze(Pionek(p.czarny_gracz,(0,5)))
-
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(2,3)))
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(5,0)))
-    p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz,(7,0)))
-
-    p.rysujPlansze()
-
-    ai = AI()
-    sciezka = ai.zwroc_ruch(p)
 
 

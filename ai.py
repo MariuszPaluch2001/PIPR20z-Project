@@ -60,12 +60,12 @@ class AI:
         
         for sciezka in plansza.mozliwe_ruchy():
 
+
             plansza_potomna = copy.deepcopy(plansza)
             plansza_potomna.wykonaj_wskazane_ruchy(sciezka)
             plansza_potomna.kolejka += 1
             (plansza_negamax, ocena_negamax, sciezka_negamax) = self.negamax(plansza_potomna, glebokosc-1)
-
-            if -ocena_negamax > max_ocena:
+            if -ocena_negamax >= max_ocena:
                 max_ocena = -ocena_negamax
                 max_plansza = plansza_negamax
                 max_sciezka = sciezka

@@ -134,6 +134,7 @@ class Plansza(object):
         Wykonuje sekwencyjnie kolejne ruchy podane w tablicy sciezka_ruchu
     """
     def wykonaj_wskazane_ruchy(self, sciezka_ruchu):
+
         for i in range(len(sciezka_ruchu)-1):
             self.wykonaj_pojedynczy_ruch(sciezka_ruchu[i], sciezka_ruchu[i+1])
         return
@@ -303,3 +304,21 @@ class Plansza(object):
 
         root_logger.debug('\n'.join(linie))
         print('\n'.join(linie))
+
+    def to_python(self):
+        print("p = Plansza()")
+
+        for pionek in self.biale_pionki:
+            print("p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz," + str(pionek.get_pozycja()) + "))")
+
+        for pionek in self.czarne_pionki:
+            print("p.wstaw_pionek_na_plansze(Pionek(p.bialy_gracz," + str(pionek.get_pozycja()) + "))")
+
+        print("p.kolejka = " + str(self.kolejka))
+        print("p.rysujPlansze()")
+        print("ai = AI()")
+        print("sciezka = ai.zwroc_ruch(p)")
+
+
+
+

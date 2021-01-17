@@ -113,7 +113,7 @@ class LudzkiGracz(Gracz):
 class LosowyKomputer(Gracz):
 
     def name(self):
-        return "Glupiutki komputer (losowe ruchy)"
+        return "Losowe Ruchy"
 
 
     def zwroc_ruch(self, plansza):
@@ -123,7 +123,7 @@ class LosowyKomputer(Gracz):
 """
   Implementacja madrego gracza oprata na algorytmie negamax
 """
-class InteligentyKomputer(Gracz):
+class InteligentnyKomputer(Gracz):
 
     def __init__(self, kolor=None):
         super()
@@ -132,10 +132,12 @@ class InteligentyKomputer(Gracz):
     def name(self):
         return super().get_logo() + " AI (poziom : " + str(self.ai.maksymalna_glebokosc) + " )"
 
-    def ustaw_poziom_trudnosci(self, poziom=6):
+    def ustaw_poziom_trudnosci(self, poziom=2):
         self.ai.set_maksymalna_glebokosc(poziom)
 
     def zwroc_ruch(self, plansza):
         return self.ai.zwroc_ruch(plansza)
+
+
 
 
