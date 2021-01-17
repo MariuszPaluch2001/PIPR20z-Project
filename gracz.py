@@ -1,11 +1,9 @@
 
 import random
-#from copy import deepcopy
 import copy
 from ai import AI
 from pomocnicze import *
 
-#klasa gracz nie powinna przechowywac informacji o pionkach
 class Gracz(object):
 
     BLACK = 1
@@ -81,7 +79,6 @@ class LudzkiGracz(Gracz):
         return "Ludzki gracz"
 
     def zwroc_ruch(self, plansza):
-        # obowiazkowe_bicia = []
         mozliwe_ruchy = []
 
         print("Dostepne ruchy")
@@ -89,45 +86,46 @@ class LudzkiGracz(Gracz):
 
         mozliwe_ruchy = plansza.mozliwe_ruchy()
         for sciezka in mozliwe_ruchy:
-            str_sciezka = []
-            # print("Ruch")
-            for ruch in sciezka:
-                    str_sciezka.append(str(chr(ruch[1]+65)) +  str(ruch[0]))
+            #str_sciezka = []
+            #for ruch in sciezka:
+            #        str_sciezka.append(str(chr(ruch[1]+65)) +  str(ruch[0]))
 
-            print( '[' + str(i)  + ']\t\t' + '  ->  '.join(str_sciezka))
+            print( '[' + str(i)  + ']\t\t' + sciezka_to_str(sciezka))
             i += 1
 
         indeks_ruchu = int(input("Wprowadz number ruchu ktory chcesz wykonac np. 1: "))
         return mozliwe_ruchy[indeks_ruchu]
 
-# Trzeba zaimplementowac algorytm minikasowy
+
+"""
+  Naiwna implementacja komputerowego gracza zwracajaca pierwszy ruch z drzewa dostepnych ruchow
+"""
 class GlupiutkiKomputer(Gracz):
 
     def name(self):
-        return "Glupioutki komp"
+        return "Glupiutki komputer (losowe ruchy)"
 
 
     def zwroc_ruch(self, plansza):
-        # glupiutki, bo zawsze wybierze pierwszy ruch
-        indeks_ruchu = random.randint(0, len(plansza.mozliwe_ruchy())-1)
-        return plansza.mozliwe_ruchy()[indeks_ruchu]
-        #return plansza.mozliwe_ruchy(self)[len(plansza.mozliwe_ruchy(self))-1]
+        losowy_indeks = random.randint(0, len(plansza.mozliwe_ruchy())-1)
+        return plansza.mozliwe_ruchy()[losowy_indeks]
 
+"""
+  Implementacja madrego gracza oprata na algorytmie negamax
+"""
 class MadryKomputer(Gracz):
+
+    def __init__(self, kolor=None):
+        super()
+        self.ai = AI()
+
     def name(self):
-        return "Madry komputer (negamax)"
+        return "Madry komputer ( alg. negamax, glebokosc: " + str(self.ai.maksymalna_glebokosc) + " )"
+
+    def ustaw_poziom_trudnosci(self, poziom=6):
+        ai.set_maksymalna_glebokosc(poziom)
 
     def zwroc_ruch(self, plansza):
-        # glupiutki, bo zawsze wybierze pierwszy ruch
+        return self.ai.zwroc_ruch(plansza)
 
-        ai = AI(plansza, 4)
-        #kopia = copy.deepcopy(plansza)
-        kopia = plansza
-        (najlepsza_plansza, najlepsza_ocena, najlepsza_sciezka) = ai.negamax(ai.startowa_plansza, ai.maksymalna_glebokosc)
-
-        print(najlepsza_sciezka) 
-        #print("Gracz " + self.name + " wykonuje ruch: ")
-        #for ruch in najlepsza_sciezka:
-        print("Najsciezka " + sciezka_to_str(najlepsza_sciezka))
-        return najlepsza_sciezka
 

@@ -3,16 +3,16 @@ from gracz import Gracz
 class Pionek(object):
 
     def __init__(self, gracz, pozycja, damka = False):
-        """
-            Tworzy pionka
-        """
         self.gracz = gracz
         self.pozycja = pozycja
         self.jest_damka = damka
 
-    #definiuje w jakich kierunkach moze poruszac sie pionek (lub damka)
+    """
+    Funkcja definiuje w jakich kierunkach moze poruszac sie pionek (lub damka)
+    Rozmieszenie kolorow na planszy jest niezmienne i ma wplyw na orientacje(wartosci) wektorow ruchu
+    """
     def get_wektory_ruchu(self):
-        if self.jest_damka is False: # to jest pewna niepokajaca zelznosc pionka od jego koloru gracza !
+        if self.jest_damka is False:
             if self.gracz.kolor == Gracz.WHITE:
                 return [(-1,1),(1,1)]
             elif self.gracz.kolor == Gracz.BLACK:
@@ -20,9 +20,6 @@ class Pionek(object):
         else:
             return [(-1,-1),(1,-1),(1,1),(-1,1)]
 
-    def zamien_w_damke(self):
-        if self.jest_damka != True:
-            self.jest_damka = True
 
     def get_pozycja(self):
         return self.pozycja

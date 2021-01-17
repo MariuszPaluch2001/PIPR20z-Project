@@ -1,10 +1,3 @@
-
-
-#from copy import deepcopy
-#from plansza import Plansza
-#from gracz import *
-#from negamax import NegamaxAlgorytm
-
 from gracz import Gracz
 from plansza import Plansza
 from gracz import GlupiutkiKomputer
@@ -13,7 +6,6 @@ from gracz import LudzkiGracz
 from ai import AI
 from pomocnicze import *
 import copy
-
 
 
 class Warcaby():
@@ -79,8 +71,8 @@ rodzaj_gracza2 = int(input("Wprowadz typ gracza2 (bialy) " + "\n".join([ "\n[1]\
 gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else GlupiutkiKomputer()
 gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else MadryKomputer()
 #gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else MadryKomputer()
-print (gracz1.name())
-print (gracz2.name())
+print ("Gracz1: " + gracz1.name())
+print ("Gracz2: " + gracz2.name())
 w = Warcaby(gracz1, gracz2)
 w.graj()
 
