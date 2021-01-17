@@ -26,13 +26,15 @@ class Warcaby():
         Zwraca numer gracza bedacego zwyciezca (1 lub 2) lub 0 gdy remis
     """
     def graj(self):
+        print ("Gracz1: " + gracz1.name())
+        print ("Gracz2: " + gracz2.name())
         self.plansza.rysujPlansze()
         wynik = None
         while (wynik == None):
             plansza_kopia = copy.deepcopy(self.plansza)
 
             ruch = self.plansza.get_gracz_wykonujacy_ruch().zwroc_ruch(plansza_kopia)
-            print("Gracz " + self.plansza.get_gracz_wykonujacy_ruch().get_kolor_string() + " : " + sciezka_to_str(ruch))
+            print("Gracz " + self.plansza.get_gracz_wykonujacy_ruch().get_logo() + " : " + sciezka_to_str(ruch))
             self.plansza.wykonaj_wskazane_ruchy(ruch)
 
             self.plansza.kolejka += 1
@@ -50,24 +52,27 @@ class Warcaby():
         return self.plansza.wynik
 
 
+while(True):
+    print("*"*15 +  "Witamy w warcabach angielskich ... " + "*"*15 )
+    print("Zasady gry znajduja sie w pliku README")
 
-print("*"*15 +  "Witamy w warcabach angielskich ... " + "*"*15 )
-print("Zasady gry znajduja sie w pliku README")
 
-rodzaj_gracza1 = int(input("Wprowadz typ gracza1 (czarny) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"]) + "\n"))
-rodzaj_gracza2 = int(input("Wprowadz typ gracza2 (bialy) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"])+ "\n"))
+    try:
+        rodzaj_gracza1 = int(input("Wprowadz typ gracza1 (czarny) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"]) + "\n"))
+        rodzaj_gracza2 = int(input("Wprowadz typ gracza2 (bialy) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"])+ "\n"))
 
-gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else InteligentyKomputer()
-gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else InteligentyKomputer()
+        gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else InteligentyKomputer()
+        gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else InteligentyKomputer()
 
-if rodzaj_gracza1 == 2:
-    gracz1.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza1. Zalecany z przedzialu [1-4]\n")))
+        if rodzaj_gracza1 == 2:
+            gracz1.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza1. Zalecany z przedzialu [1-4]\n")))
 
-if rodzaj_gracza2 == 2:
-    gracz2.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza2. Zalecany z przedzialu [1-4]\n")))
+        if rodzaj_gracza2 == 2:
+            gracz2.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza2. Zalecany z przedzialu [1-4]\n")))
 
-print ("Gracz1: " + gracz1.name())
-print ("Gracz2: " + gracz2.name())
-w = Warcaby(gracz1, gracz2)
-w.graj()
+    except ValueError:
+        print("Ups... cos poszlo nie tak, sprobujmy jeszcze raz")
+        continue
 
+    print("No to zaczynamy ...")
+    Warcaby(gracz1, gracz2).graj()

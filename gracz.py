@@ -19,6 +19,12 @@ class Gracz(object):
     def set_pionki(self, pionki):
         self.pionki = pionki
 
+    def get_logo(self):
+        if self.kolor == self.WHITE:
+            return '◇'
+        elif self.kolor == self.BLACK:
+            return '◆'
+
     def get_kolor_string(self):
         if self.kolor == self.WHITE:
             return "Bialy"
@@ -76,12 +82,13 @@ class Gracz(object):
 class LudzkiGracz(Gracz):
 
     def name(self):
-        return "Ludzki gracz"
+        return self.get_logo() + " Ludzki gracz"
+
 
     def zwroc_ruch(self, plansza):
         mozliwe_ruchy = []
 
-        print("Dostepne ruchy")
+        print("Dostepne ruchy "+ self.get_logo())
         i = 0
 
         mozliwe_ruchy = plansza.mozliwe_ruchy()
@@ -89,8 +96,15 @@ class LudzkiGracz(Gracz):
             print( '[' + str(i)  + ']\t\t' + sciezka_to_str(sciezka))
             i += 1
 
-        indeks_ruchu = int(input("Wprowadz number ruchu ktory chcesz wykonac np. 1: "))
-        return mozliwe_ruchy[indeks_ruchu]
+        while(True):
+            try:
+                indeks_ruchu = int(input("Wprowadz number ruchu ktory chcesz wykonac np. 1: "))
+                ruch = mozliwe_ruchy[indeks_ruchu]
+                return ruch
+            except (IndexError, ValueError):
+                print("Ups, sprobujmy jeszcze raz")
+                continue
+        
 
 
 """
@@ -116,7 +130,7 @@ class InteligentyKomputer(Gracz):
         self.ai = AI()
 
     def name(self):
-        return "AI (poziom : " + str(self.ai.maksymalna_glebokosc) + " )"
+        return super().get_logo() + " AI (poziom : " + str(self.ai.maksymalna_glebokosc) + " )"
 
     def ustaw_poziom_trudnosci(self, poziom=6):
         self.ai.set_maksymalna_glebokosc(poziom)
