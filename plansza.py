@@ -28,9 +28,6 @@ class Plansza(object):
         # Listy z pionkami obu graczy
         self.czarne_pionki = []
         self.biale_pionki = []
-        self.pionki = []
-
-        self.pionki = [self.biale_pionki, self.czarne_pionki]
 
         # aktualna plansza ze znakami do odrysowania
         self.stanPlanszy = [[' '] * self.szerokosc for x in range(self.wysokosc)]
@@ -270,7 +267,10 @@ class Plansza(object):
             for j in range(self.wysokosc):
                 self.stanPlanszy[i][j] = " "
 
-        for pionek in [item for sublist in self.pionki for item in sublist]:  # iteruj po splaszczonej liscie z wszystkimi pionkami
+        for pionek in self.biale_pionki:
+            self.stanPlanszy[pionek.get_pozycja()[1]][pionek.get_pozycja()[0]] = pionek.get_znak_pionka()
+
+        for pionek in self.czarne_pionki:
             self.stanPlanszy[pionek.get_pozycja()[1]][pionek.get_pozycja()[0]] = pionek.get_znak_pionka()
 
     """
