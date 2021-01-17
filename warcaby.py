@@ -1,6 +1,6 @@
 from gracz import Gracz
 from plansza import Plansza
-from gracz import InteligentyKomputer
+from gracz import InteligentnyKomputer
 from gracz import LudzkiGracz
 from ai import AI
 from pomocnicze import *
@@ -23,18 +23,19 @@ class Warcaby():
 
     """
         Metoda rozpoczynajaca gre w Warcaby
-        Zwraca numer gracza bedacego zwyciezca (1 lub 2) lub 0 gdy remis
+        Zwraca gracza bedacego zwyciezca lub 0 gdy remis
     """
     def graj(self):
-        print ("Gracz1: " + gracz1.name())
-        print ("Gracz2: " + gracz2.name())
+        print ("Gracz1: " + self.gracz1.name())
+        print ("Gracz2: " + self.gracz2.name())
         self.plansza.rysujPlansze()
         wynik = None
         while (wynik == None):
             plansza_kopia = copy.deepcopy(self.plansza)
 
             ruch = self.plansza.get_gracz_wykonujacy_ruch().zwroc_ruch(plansza_kopia)
-            print("Gracz " + self.plansza.get_gracz_wykonujacy_ruch().get_logo() + " : " + sciezka_to_str(ruch))
+            print("\nGracz " + self.plansza.get_gracz_wykonujacy_ruch().get_logo() + " : " + sciezka_to_str(ruch))
+
             self.plansza.wykonaj_wskazane_ruchy(ruch)
 
             self.plansza.kolejka += 1
@@ -46,33 +47,39 @@ class Warcaby():
         if wynik == Plansza.WYNIK_REMIS:
             print("Gra zakonczyla sie remisem")
         else:
-            print("Zwyciezyl gracz " + wynik.get_kolor_string())
+            print("Zwyciezyl gracz " + wynik.get_kolor_string() + " " + wynik.get_logo())
 
         print("Ilosc kolejek " + str(self.plansza.kolejka))
-        return self.plansza.wynik
+        return wynik
 
 
-while(True):
-    print("*"*15 +  "Witamy w warcabach angielskich ... " + "*"*15 )
-    print("Zasady gry znajduja sie w pliku README")
+def main():
+
+    while(True):
+        print("*"*15 +  "Witamy w warcabach angielskich ... " + "*"*15 )
+        print("Zasady gry znajduja sie w pliku README")
 
 
-    try:
-        rodzaj_gracza1 = int(input("Wprowadz typ gracza1 (czarny) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"]) + "\n"))
-        rodzaj_gracza2 = int(input("Wprowadz typ gracza2 (bialy) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"])+ "\n"))
+        try:
+            rodzaj_gracza1 = int(input("Wprowadz typ gracza1 (czarny) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"]) + "\n"))
+            rodzaj_gracza2 = int(input("Wprowadz typ gracza2 (bialy) " + "\n".join([ "\n[1]\t Czlowiek", "[2]\t Komputer"])+ "\n"))
 
-        gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else InteligentyKomputer()
-        gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else InteligentyKomputer()
+            gracz1 = LudzkiGracz() if rodzaj_gracza1 == 1 else InteligentnyKomputer()
+            gracz2 = LudzkiGracz() if rodzaj_gracza2 == 1 else InteligentnyKomputer()
 
-        if rodzaj_gracza1 == 2:
-            gracz1.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza1. Zalecany z przedzialu [1-4]\n")))
+            if rodzaj_gracza1 == 2:
+                gracz1.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza1. Zalecany z przedzialu [1-4]\n")))
 
-        if rodzaj_gracza2 == 2:
-            gracz2.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza2. Zalecany z przedzialu [1-4]\n")))
+            if rodzaj_gracza2 == 2:
+                gracz2.ustaw_poziom_trudnosci(int(input("Wybierz numer okreslajacy poziom trudnosci gracza2. Zalecany z przedzialu [1-4]\n")))
 
-    except ValueError:
-        print("Ups... cos poszlo nie tak, sprobujmy jeszcze raz")
-        continue
+        except ValueError:
+            print("Ups... cos poszlo nie tak, sprobujmy jeszcze raz")
+            continue
 
-    print("No to zaczynamy ...")
-    Warcaby(gracz1, gracz2).graj()
+        print("No to zaczynamy ...")
+        Warcaby(gracz1, gracz2).graj()
+
+
+if __name__ == "__main__":
+    main()

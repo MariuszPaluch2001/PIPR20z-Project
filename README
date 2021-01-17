@@ -1,3 +1,4 @@
+************************** ZASADY GRY W WARCABY ANGIELSKIE **************************************
 Warcaby angielskie (warcaby amerykańskie, czekersy)[1] – wariant warcabów.
 Plansza jest 8x8, 12 pionów dla każdego z graczy.
 Pozycja początkowa jest taka sama jak w warcabach międzynarodowych 8x8.
@@ -11,7 +12,10 @@ Król ma analogiczną możliwość wykonywania posunięć jak pion, z tym, że m
 Wygrana następuje po zbiciu wszystkich bierek przeciwnika lub uniemożliwieniu wykonania przez nie ruchu.
 Remis nastepuje gdy po 20 nieprzerwanych ruchach damkami obu graczy
 
-
 Szansa uzyskania remisu, nawet z dużo silniejszym przeciwnikiem, jest o wiele większa w warcabach angielskich niż w warcabach międzynarodowych, nie wymagają też tak intensywnego myślenia.
 
 Z praktyczną liczbą pozycji jest znacznie trudniej, bo NIE wszystkie teoretyczne pozycje moga być w rzeczywistej grze osiągnięte ze wzgledu na przymus bicia i jednokierunkowy ruch pionków.
+
+***************************** URUCHOMIENIE ***************************************************
+
+python3 warcaby.py 
