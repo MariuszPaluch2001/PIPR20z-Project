@@ -6,6 +6,6 @@ def sciezka_to_str(sciezka):
         sciezka_str += " -> " + pozycja_to_str(ruch)
     return sciezka_str
 
-def pozycja_to_str(pozycja):
-    return (str(chr(pozycja[1]+65)) +  str(pozycja[0]))
 
+def pozycja_to_str(pozycja):
+    return (str(chr(pozycja[1] + 65)) + str(pozycja[0]))

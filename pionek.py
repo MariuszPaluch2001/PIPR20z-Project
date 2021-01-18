@@ -1,8 +1,9 @@
 from gracz import Gracz
 
+
 class Pionek(object):
 
-    def __init__(self, gracz, pozycja, damka = False):
+    def __init__(self, gracz, pozycja, damka=False):
         self.gracz = gracz
         self.pozycja = pozycja
         self.jest_damka = damka
@@ -14,12 +15,11 @@ class Pionek(object):
     def get_wektory_ruchu(self):
         if self.jest_damka is False:
             if self.gracz.kolor == Gracz.WHITE:
-                return [(-1,1),(1,1)]
+                return [(-1, 1), (1, 1)]
             elif self.gracz.kolor == Gracz.BLACK:
-                return [(-1,-1),(1,-1)]
+                return [(-1, -1), (1, -1)]
         else:
-            return [(-1,-1),(1,-1),(1,1),(-1,1)]
-
+            return [(-1, -1), (1, -1), (1, 1), (-1, 1)]
 
     def get_pozycja(self):
         return self.pozycja

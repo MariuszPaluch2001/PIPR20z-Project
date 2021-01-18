@@ -8,7 +8,7 @@ import copy
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
-handler = logging.FileHandler('warcaby-utf8.log', 'w', 'utf-8') 
+handler = logging.FileHandler('warcaby-utf8.log', 'w', 'utf-8')
 handler.setFormatter(logging.Formatter('%(name)s %(message)s'))
 log.addHandler(handler)
 
@@ -295,5 +295,5 @@ class Plansza(object):
         linie.append(chr(self.wysokosc + 64) + '  ' + ' │ ' + ' │ '.join(self.stanPlanszy[-1]) + ' │')
         linie.append('    ╰' + ('───┴' * (self.szerokosc - 1)) + '───╯')
 
-        #log.info('\n'.join(linie))
+        # log.info('\n'.join(linie))
         print('\n'.join(linie))
