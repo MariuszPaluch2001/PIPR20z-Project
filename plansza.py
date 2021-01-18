@@ -68,7 +68,7 @@ class Plansza(object):
         return self.biale_pionki
 
     """
-        Funkcja sprawdza czy gra zakonczona zwyciestwem (zwraca zwycieskiego gracza) lub remisem
+        Funkcja sprawdza czy gra zakonczona zwyciestwem (zwraca zwycieskiego gracza) lub remisem - zwraca 0
     """
     def koniec_gry(self):
         gracz = self.get_gracz_wykonujacy_ruch()
@@ -128,7 +128,7 @@ class Plansza(object):
         return self.przesun_pionek_na_dana_pozycje(pionek, ruch_do)
 
     """
-        Wykonuje sekwencyjnie kolejne ruchy podane w tablicy sciezka_ruchu
+        Wykonuje sekwencyjnie kolejne ruchy wskazane w liscie sciezka_ruchu
     """
     def wykonaj_wskazane_ruchy(self, sciezka_ruchu):
 

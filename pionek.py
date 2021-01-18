@@ -14,9 +14,9 @@ class Pionek(object):
     """
     def get_wektory_ruchu(self):
         if self.jest_damka is False:
-            if self.gracz.kolor == Gracz.WHITE:
+            if self.gracz.kolor == Gracz.BIALY:
                 return [(-1, 1), (1, 1)]
-            elif self.gracz.kolor == Gracz.BLACK:
+            elif self.gracz.kolor == Gracz.CZARNY:
                 return [(-1, -1), (1, -1)]
         else:
             return [(-1, -1), (1, -1), (1, 1), (-1, 1)]
@@ -28,13 +28,13 @@ class Pionek(object):
         self.pozycja = pozycja
 
     def get_znak_pionka(self):
-        if self.jest_damka is False and self.gracz.kolor == Gracz.BLACK:
+        if self.jest_damka is False and self.gracz.kolor == Gracz.CZARNY:
             return '◆'
-        elif self.jest_damka is False and self.gracz.kolor == Gracz.WHITE:
+        elif self.jest_damka is False and self.gracz.kolor == Gracz.BIALY:
             return '◇'
-        elif self.jest_damka is True and self.gracz.kolor == Gracz.WHITE:
+        elif self.jest_damka is True and self.gracz.kolor == Gracz.BIALY:
             return '♔'
-        elif self.jest_damka is True and self.gracz.kolor == Gracz.BLACK:
+        elif self.jest_damka is True and self.gracz.kolor == Gracz.CZARNY:
             return '♚'
         else:
             return '?'

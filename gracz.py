@@ -6,8 +6,8 @@ from pomocnicze import sciezka_to_str
 
 class Gracz(object):
 
-    BLACK = 1
-    WHITE = 2
+    CZARNY = 1
+    BIALY = 2
 
     def __init__(self, kolor=None):
         """
@@ -20,30 +20,30 @@ class Gracz(object):
         self.pionki = pionki
 
     def get_logo(self):
-        if self.kolor == self.WHITE:
+        if self.kolor == self.BIALY:
             return '◇'
-        elif self.kolor == self.BLACK:
+        elif self.kolor == self.CZARNY:
             return '◆'
 
     def get_kolor_string(self):
-        if self.kolor == self.WHITE:
+        if self.kolor == self.BIALY:
             return "Bialy"
-        elif self.kolor == self.BLACK:
+        elif self.kolor == self.CZARNY:
             return "Czarny"
         else:
             return "Brak"
 
     def ustaw_bialy_kolor(self):
-        self.kolor = self.WHITE
+        self.kolor = self.BIALY
 
     def ustaw_czarny_kolor(self):
-        self.kolor = self.BLACK
+        self.kolor = self.CZARNY
 
     def jest_koloru_bialego(self):
-        return self.kolor == self.WHITE
+        return self.kolor == self.BIALY
 
     def jest_koloru_czarnego(self):
-        return self.kolor == self.BLACK
+        return self.kolor == self.CZARNY
 
     def get_mnoznik_punktow(self):
         if self.jest_koloru_czarnego():

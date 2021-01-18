@@ -1,0 +1,38 @@
+Pracę na implementacją warcabów ropoczęto od stworzenia szablonu klas, wyodrębniono klasy:
+Plansza - klasa reprezentujaca plansze i warunki gry (stan pionkow, kolejke , mozliwe ruchy, warunek konca itd.)
+Pionek - klasa reprezentujaca stan pionka (kolor, typ, pozycja itd.)
+Gracz - bazowa klasa gracza ( uzywana przez klasy: LudzkiGracz i InteligentnyKomputer)
+WezelDrzewa - do budowania drzewa bic na planszy
+AI - do implementacji alg. gracza komputerowego
+
+Kluczową klasą jest klasa Plansza odpowiedzialna za poprawność procesu generowania ruchów.
+Możliwe kolejne bicia z danego punktu wstawiane są jako kolejne węzły drzewa gdzie rodzicem jest poprzednie pole.
+W ten sposób powstaje drzewo dopuszczalnych ruchów gracza.
+Natomiast możliwe ruchy nie wiążace się z biciem pionka przeciwnika zwracane są w postaci listy.
+Jeżeli 'drzewo bić' jest niepuste to ścieżki z niego wygenerowane są jedynymi obowiązującymi dla gracza ruchami.
+Implementacja tej klasy uległa zmianie w celu obsłużenie scenariusza wielokrotnego bicia damki. Nie wiem czy jest to ustawienie
+możliwe do zrealizowania ale problem z nim związany polega na możliwości zapętlenia się procesu generowania 'drzewa bić'.
+Problem rozwiązano tworząc każdorazowo głęboką kopię obiektu na potrzeby 'symulacji ruchów' i modyfikując nową kopię planszy w miarę postępu symulacji.
+
+Klasa Gracz natomiast posiada metodę zwróć ruch która bazuje na metoddzie generującej ruchy z klasy Plansza.
+Ludzki gracz wskazuje ruch/ścieżkę którą chce wykonać. Klasa AI natomiast używa możliwych ruchów do generowania 'symulacji' gry w kolejnych
+ N kolejkach, gdzie N określone jest jako atrybut klasy nazywany maksymalna_glebokosc. Tzn. w procesie symulacji w kazdej kolejnej kolejce ruchu tworzona jest nowia kopia plaszy z kolejki poprzedniej (gleboka kopia)
+i proces jest powtarzany do osiągnięcia zadanej głębokości lub zakońćzenia gry.
+W każdej takiej turze obliczana jest wartość liczbowa określająca użyteczność planszy z punktu widzenia gracza AI (komputer) który 'orginalnie' wykonuje ruch.
+Wartosc to ustalono na roznice sumy punktow za pionki obu graczy, przy czym damki licza sie x3.
+Zwycieztwo, przegrana i remis gracza sa odpowiednio punktowane Inf, -Inf oraz 0. Alg. ten nazywany jest alg. minimax.
+Zdecydowalem sie na jego inny wariant tzn. negamax, ze wzgledy na jego prostsza forme https://en.wikipedia.org/wiki/Negamax .
+Glebokosc przeszukiwania alg. negamax jest konfigurowalna, jednak ze wzgledu na czas odpowiedzi zaleca sie ustawienie glebokosci/poziomu trudnosci na max 4.
+W celu weryfikacji algortymu rozgrano 10 tur AI o poziomie 2 z graczem wybierjacym losowe ruchy. AI wygral 10/10 rozgrywek.
+
+W celu rozegrania pojedynczej takiej rundy urchom komende : pytest test_ai.py -k test_ai_negamax_vs_losowy_gracz
+
+Pozostale testy zostaly udokumentowane komentarzami oraz domyslnie powinny wyswietlac stan planszy podlegajacej testowi.
+
+Gre mozna uruchomic nastepujaco:
+
+python3 warcaby.py
+
+UWAGI
+Plansza w terminalu VS code 'rozjezdza sie nieznacznie' ( jakis problem ze znakami utf-8 ), na terminalu Linux dziala OK.
+

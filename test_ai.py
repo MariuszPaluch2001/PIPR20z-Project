@@ -49,9 +49,9 @@ def test_negamax_1_ruch():
 
 def test_ai_negamax_vs_losowy_gracz():
     gracze = []
-    for i in range(1, 2):
-        ai = LosowyKomputer()
-        gracze.append(ai)
+
+    ai = LosowyKomputer()
+    gracze.append(ai)
 
     faworyt = InteligentnyKomputer()
     faworyt.ustaw_poziom_trudnosci(3)
